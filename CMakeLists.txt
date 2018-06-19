@@ -1,10 +1,24 @@
+
+# ------------------------------------------------------------------------------
+#  Project settings
+# ------------------------------------------------------------------------------
+
 cmake_minimum_required (VERSION 3.0.2)
 project (pistache)
-include(CheckCXXCompilerFlag)
 
-option(PISTACHE_BUILD_TESTS "build tests alongside the project" OFF)
-option(PISTACHE_BUILD_EXAMPLES "build examples alongside the project" OFF)
-option(PISTACHE_INSTALL "add pistache as install target (recommended)" ON)
+# ------------------------------------------------------------------------------
+#  Configuration options
+# ------------------------------------------------------------------------------
+
+option (PISTACHE_BUILD_TESTS    "Build tests alongside the project"            OFF)
+option (PISTACHE_BUILD_EXAMPLES "Build examples alongside the project"         OFF)
+option (PISTACHE_INSTALL        "Add pistache as install target (recommended)" ON )
+
+# ------------------------------------------------------------------------------
+#  Compiler configuration
+# ------------------------------------------------------------------------------
+
+include(CheckCXXCompilerFlag)
 
 CHECK_CXX_COMPILER_FLAG("-std=c++11" COMPILER_SUPPORTS_CXX11)
 CHECK_CXX_COMPILER_FLAG("-std=c++0x" COMPILER_SUPPORTS_CXX0X)
@@ -21,9 +35,15 @@ add_subdirectory (src)
 
 include_directories (src)
 
+#_______________________________________________________________________________
+# Handle option: Build examples alongside the project
+
 if (PISTACHE_BUILD_EXAMPLES)
     add_subdirectory (examples)
 endif()
+
+#_______________________________________________________________________________
+# Handle option: Build tests alongside the project
 
 if (PISTACHE_BUILD_TESTS)
     find_package(GTest)
@@ -35,5 +55,6 @@ if (PISTACHE_BUILD_TESTS)
     endif()
 
     enable_testing()
+    include (CTest)
     add_subdirectory(tests)
 endif()
